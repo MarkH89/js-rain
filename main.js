@@ -2,10 +2,16 @@
 	function(){
 		
 		// Init
-		let COLOR, Rain, NUM_RAIN, canvas, ctx, rain, drawRain, i, range;
+		let COLOR, Rain, NUM_RAIN, canvas, ctx, rain, drawRain, i, range, ANGLE, LENGTH_RAIN;
 		
 		// How rainy is it?
 		NUM_RAIN = 200;
+		
+		// Angle of rain
+		ANGLE = 45;
+		
+		// Length of rain
+		LENGTH_RAIN = 50;
 		
 		// What color is the rain?
 		COLOR = [0,0,250];
@@ -32,8 +38,8 @@
 			constructor() {
 				this.xStart = Math.random() * canvas.width;
 				this.yStart = Math.random() * canvas.height;
-				this.xEnd = (Math.random() * 100) + this.xStart;
-				this.yEnd = (Math.random() * 100) + this.yStart;
+				this.xEnd = this.xStart + (LENGTH_RAIN * Math.sin(-ANGLE / (Math.PI/180)));
+				this.yEnd = this.yStart + (LENGTH_RAIN * Math.cos(-ANGLE / (Math.PI/180)));
 			}
 			draw() {
 				return drawRain(this.xStart, this.yStart, this.xEnd, this.yEnd);
