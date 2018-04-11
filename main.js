@@ -5,7 +5,7 @@
 		let COLOR, Rain, NUM_RAIN, canvas, ctx, rain, drawRain, i, range;
 		
 		// How rainy is it?
-		NUM_RAIN = 20;
+		NUM_RAIN = 200;
 		
 		// What color is the rain?
 		COLOR = [0,0,250];
@@ -15,6 +15,10 @@
 		
 		// Get context
 		ctx = canvas.getContext('2d');
+		
+		// Size canvas to window
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
 		
 		// Draw the rain
 		drawRain = function(xStart, yStart, xEnd, yEnd){
@@ -26,8 +30,8 @@
 		
 		Rain = class Rain {
 			constructor() {
-				this.xStart = Math.random() * 100;
-				this.yStart = Math.random() * 100;
+				this.xStart = Math.random() * canvas.width;
+				this.yStart = Math.random() * canvas.height;
 				this.xEnd = (Math.random() * 100) + this.xStart;
 				this.yEnd = (Math.random() * 100) + this.yStart;
 			}
