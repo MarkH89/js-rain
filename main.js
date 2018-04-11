@@ -18,9 +18,10 @@
 		
 		// Draw the rain
 		drawRain = function(x, y, r, style){
-			ctx.beginPath();
-			ctx.fillStyle = `rgba(${COLOR[0]}, ${COLOR[1]}, ${COLOR[2]}, 0.8)`;
-			ctx.fillRect(50,50,2,50)
+			ctx.strokeStyle = `rgba(${COLOR[0]}, ${COLOR[1]}, ${COLOR[2]}, 0.8)`;
+			ctx.moveTo(50,50);
+			ctx.lineTo(150,200);
+			ctx.stroke();
 		}
 		
 		drawRain();
