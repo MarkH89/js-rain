@@ -2,9 +2,11 @@
 	function(){
 		
 		// Init
-		let COLOR, Rain, NUM_RAIN, canvas, ctx, rain, drawRain, i, ANGLE, LENGTH_RAIN, RAIN_SPEED, tightness, boundary;
+		let COLOR, Rain, NUM_RAIN, canvas, ctx, rain, drawRain, i, ANGLE, RAIN_LENGTH, RAIN_SPEED, TIGHTNESS, boundary, PI_180;
 		
 		let num_ctrl, angle_ctrl, tightness_ctrl, length_ctrl, speed_ctrl, VAR_RAIN_LENGTH, VAR_RAIN_SPEED; 
+	
+		PI_180 = Math.PI/180;
 	
 		boundary = 0;
 	
@@ -18,11 +20,11 @@
 			
 		// Angle of rain
 		tightness_ctrl = document.getElementById('tightness');
-		tightness = parseInt(tightness_ctrl.value);
+		TIGHTNESS = parseInt(tightness_ctrl.value);
 		
 		// Length of rain
 		length_ctrl = document.getElementById('length');
-		LENGTH_RAIN = parseInt(length_ctrl.value);
+		RAIN_LENGTH = parseInt(length_ctrl.value);
 
 		var_length_ctrl = document.getElementById('var_length');
 		VAR_RAIN_LENGTH = parseInt(var_length_ctrl.value);
@@ -58,40 +60,56 @@
 		
 		Rain = class Rain {
 			constructor() {
-				this.xStart = Math.random() * canvas.width;
-				this.yStart = Math.random() * canvas.height;
-				this.angle = ANGLE// + ((Math.random() * 20)) - 10 );
-				this.xEnd = this.xStart + (Math.sin(this.angle * (Math.PI/180)) * LENGTH_RAIN);
-				this.yEnd = this.yStart + (Math.cos(this.angle * (Math.PI/180)) * LENGTH_RAIN);
-				this.speed = RAIN_SPEED + (Math.random() * VAR_RAIN_SPEED);
-				this.rain_length = LENGTH_RAIN + (Math.random() * VAR_RAIN_LENGTH);
+				this.randomSVal = Math.random();
+				this.randomXVal = Math.random();
+				this.randomYVal = Math.random();
+				this.randomLVal = Math.random();
+				this.randomAVal = Math.random();
+				this.xStart = this.randomXVal * canvas.width;
+				this.yStart = this.randomYVal * canvas.height;
+				this.angle = (ANGLE + this.randomAVal * TIGHTNESS);
+				this.xEnd = this.xStart + (Math.sin(this.angle * (PI_180)) * RAIN_LENGTH);
+				this.yEnd = this.yStart + (Math.cos(this.angle * (PI_180)) * RAIN_LENGTH);
+				this.speed = RAIN_SPEED + (this.randomSVal * VAR_RAIN_SPEED);
+				this.rain_length = RAIN_LENGTH + (this.randomLVal * VAR_RAIN_LENGTH);
+				this.debug();
+			}
+			update() {
+				this.xStart = (this.randomXVal * (canvas.width + (Math.tan(this.angle * (PI_180))) * canvas.height)) - (RAIN_LENGTH + (Math.tan(this.angle * (PI_180)) * canvas.height));
+				this.yStart = this.xStart < boundary ? (this.randomYVal * canvas.height) - RAIN_LENGTH : (Math.random()) - (RAIN_LENGTH + boundary);
+				this.angle = (ANGLE + this.randomAVal * TIGHTNESS);
+				this.speed = RAIN_SPEED + (this.randomSVal * VAR_RAIN_SPEED);
+				this.rain_length = RAIN_LENGTH + (this.randomLVal * VAR_RAIN_LENGTH);				
 			}
 			fall() {
 				if(this.xStart > canvas.width || this.yStart > canvas.height){
-					this.xStart = (Math.random() * canvas.width) - LENGTH_RAIN;
-					this.yStart = this.xStart < boundary ? (Math.random() * canvas.height) - LENGTH_RAIN : (Math.random()) - (LENGTH_RAIN + boundary);
-					this.angle = (ANGLE + Math.random() * tightness);
-					this.speed = RAIN_SPEED + (Math.random() * VAR_RAIN_SPEED);
-					this.rain_length = LENGTH_RAIN + (Math.random() * VAR_RAIN_LENGTH);
+					this.update();
 				}
-				this.xStart = this.xStart + (Math.sin(this.angle * (Math.PI/180)) * this.speed);
-				this.yStart = this.yStart + (Math.cos(this.angle * (Math.PI/180)) * this.speed);
-				this.xEnd = this.xStart + (Math.sin(this.angle * (Math.PI/180)) * this.rain_length);
-				this.yEnd = this.yStart + (Math.cos(this.angle * (Math.PI/180)) * this.rain_length);
+				this.xStart = this.xStart + (Math.sin(this.angle * (PI_180)) * this.speed);
+				this.yStart = this.yStart + (Math.cos(this.angle * (PI_180)) * this.speed);
+				this.xEnd = this.xStart + (Math.sin(this.angle * (PI_180)) * this.rain_length);
+				this.yEnd = this.yStart + (Math.cos(this.angle * (PI_180)) * this.rain_length);
 			}
 			draw() {
 				this.fall();
 				return drawRain(this.xStart, this.yStart, this.xEnd, this.yEnd);
 			}
+			debug() {
+				console.log(
+					'RandomVal: ' + this.randomVal + '\n' +
+					'xStart: ' + this.xStart + '\n' +
+					'yStart: ' + this.yStart
+				);
+			}
 		}
 		
+		// The Rainmaker
 		createRain = function(){
 			var j, rainDrops;
 			rainDrops = [];
 			for ( i = 1; i <= NUM_RAIN; ++i) {
 				rainDrops.push(new Rain);
 			}
-			//console.log(rainDrops);
 			return rainDrops;
 		}
 		
@@ -113,31 +131,39 @@
 		run();
 		
 		// Add event listeners
+		
+		// Control Num Raindrops
 		num_ctrl.addEventListener('change', function(){
 			NUM_RAIN = parseInt(num_ctrl.value);
 			rain = createRain();
 		});
 		
+		// Control Angle of Rain
 		angle_ctrl.addEventListener('change', function(){
 			ANGLE = parseInt(angle_ctrl.value); 
 		});
 		
+		// Control How Tight or Loose the rain drop angle can be
 		tightness_ctrl.addEventListener('change', function(){
-			tightness = parseInt(tightness_ctrl.value); 
+			TIGHTNESS = parseInt(tightness_ctrl.value); 
 		});
 		
+		// Control the length of the drops
 		length_ctrl.addEventListener('change', function(){
-			LENGTH_RAIN = parseInt(length_ctrl.value); 
+			RAIN_LENGTH = parseInt(length_ctrl.value); 
 		});
 		
+		// Control the speed of the rain drops
 		speed_ctrl.addEventListener('change', function(){
 			RAIN_SPEED = parseInt(speed_ctrl.value); 
 		});
 		
+		// Control how variable the length can be
 		var_length_ctrl.addEventListener('change', function(){
 			VAR_RAIN_LENGTH = parseInt(var_length_ctrl.value); 
 		});
 		
+		// Control how variable the speed can be
 		var_speed_ctrl.addEventListener('change', function(){
 			VAR_RAIN_SPEED = parseInt(var_speed_ctrl.value); 
 		});
