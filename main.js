@@ -5,7 +5,7 @@
 		let COLOR, Rain, NUM_RAIN, canvas, ctx, rain, drawRain, i, range;
 		
 		// How rainy is it?
-		NUM_RAIN = 3;
+		NUM_RAIN = 20;
 		
 		// What color is the rain?
 		COLOR = [0,0,250];
@@ -28,8 +28,8 @@
 			constructor() {
 				this.xStart = Math.random() * 100;
 				this.yStart = Math.random() * 100;
-				this.xEnd = Math.random() * 100;
-				this.yEnd = Math.random() * 100;
+				this.xEnd = (Math.random() * 100) + this.xStart;
+				this.yEnd = (Math.random() * 100) + this.yStart;
 			}
 			draw() {
 				return drawRain(this.xStart, this.yStart, this.xEnd, this.yEnd);
