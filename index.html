@@ -11,9 +11,46 @@
 				margin: 0;
 				width:100%;
 			}
+			#control-box {
+				position: fixed;
+				top: 0;
+				right: 0;
+				background-color: #fff;
+				padding: 15px;
+			}
 		</style>
 	</head>
 	<body>
+		<div id="control-box">
+			<div>
+				<label>Num Raindrops</label>
+				<input id="num-rain" type="number" value="250" />
+			</div>
+			<div>
+				<label>Rain Angle</label>
+				<input id="angle" type="number" value="20" />
+			</div>
+			<div>
+				<label>Angle Tightness</label>
+				<input id="tightness" type="number" value="1" />
+			</div>
+			<div>
+				<label>Raindrop Length</label>
+				<input id="length" type="number" value="30" />
+			</div>
+			<div>
+				<label>Variable Raindrop Length</label>
+				<input id="var_length" type="number" value="50" />
+			</div>
+			<div>
+				<label>Raindrop Speed</label>
+				<input id="speed" type="number" value="5" />
+			</div>
+			<div>
+				<label>Variable Raindrop Speed</label>
+				<input id="var_speed" type="number" value="1" />
+			</div>
+		</div>
 		<canvas id="rain"></canvas>
 		<script src="main.js"></script>
 	</body>
