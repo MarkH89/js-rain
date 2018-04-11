@@ -5,16 +5,16 @@
 		let COLOR, Rain, NUM_RAIN, canvas, ctx, rain, drawRain, i, range, ANGLE, LENGTH_RAIN, RAIN_SPEED;
 		
 		// How rainy is it?
-		NUM_RAIN = 200;
+		NUM_RAIN = 250;
 		
 		// Angle of rain
-		ANGLE = 45;
+		ANGLE = 20;
 		
 		// Length of rain
-		LENGTH_RAIN = 50;
+		LENGTH_RAIN = 30;
 		
 		// Speed at which rain falls
-		RAIN_SPEED = 20;
+		RAIN_SPEED = 15;
 		
 		// What color is the rain?
 		COLOR = [0,0,250];
@@ -42,20 +42,28 @@
 			constructor() {
 				this.xStart = Math.random() * canvas.width;
 				this.yStart = Math.random() * canvas.height;
-				this.xEnd = this.xStart + (LENGTH_RAIN * Math.sin(-ANGLE / (Math.PI/180)));
-				this.yEnd = this.yStart + (LENGTH_RAIN * Math.cos(-ANGLE / (Math.PI/180)));
+				this.angle = ANGLE// + ((Math.random() * 20)) - 10 );
+				this.xEnd = this.xStart + (Math.sin(this.angle * (Math.PI/180)) * LENGTH_RAIN);
+				this.yEnd = this.yStart + (Math.cos(this.angle * (Math.PI/180)) * LENGTH_RAIN);
 			}
 			fall() {
 				if(this.xStart > canvas.width){
-					this.xStart = 0
+					this.xStart = -LENGTH_RAIN;
+					this.angle = (ANGLE + Math.random() * 20);
 				}
 				if(this.yStart > canvas.height){
-					this.yStart = 0
+					this.yStart = -LENGTH_RAIN;
+					this.angle = (ANGLE + Math.random() * 20);
 				}
-				this.xStart = this.xStart + RAIN_SPEED;
-				this.yStart = this.yStart + RAIN_SPEED;
-				this.xEnd = this.xStart + (LENGTH_RAIN * Math.sin(-ANGLE / (Math.PI/180)));
-				this.yEnd = this.yStart + (LENGTH_RAIN * Math.cos(-ANGLE / (Math.PI/180)));
+				if(this.xStart < 0 && this.yStart < 0){
+					this.xStart = 0;
+					this.yStart = 0;
+				}
+				console.log()
+				this.xStart = this.xStart + (Math.sin(this.angle * (Math.PI/180)) * RAIN_SPEED);
+				this.yStart = this.yStart + (Math.cos(this.angle * (Math.PI/180)) * RAIN_SPEED);
+				this.xEnd = this.xStart + (Math.sin(this.angle * (Math.PI/180)) * LENGTH_RAIN);
+				this.yEnd = this.yStart + (Math.cos(this.angle * (Math.PI/180)) * LENGTH_RAIN);
 			}
 			draw() {
 				this.fall();
@@ -73,8 +81,9 @@
 			return rainDrops;
 		})();
 			
+		let	c_loops = 0;
 		run = function(){
-			let r, i, len, drops;
+			let r, i, len, drops;			
 			requestAnimationFrame(run);
 			ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
 			drops = [];
