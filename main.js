@@ -2,16 +2,19 @@
 	function(){
 		
 		// Init
-		let COLOR, Rain, NUM_RAIN, canvas, ctx, rain, drawRain, i, range, ANGLE, LENGTH_RAIN;
+		let COLOR, Rain, NUM_RAIN, canvas, ctx, rain, drawRain, i, range, ANGLE, LENGTH_RAIN, RAIN_SPEED;
 		
 		// How rainy is it?
-		NUM_RAIN = 1;
+		NUM_RAIN = 200;
 		
 		// Angle of rain
 		ANGLE = 45;
 		
 		// Length of rain
 		LENGTH_RAIN = 50;
+		
+		// Speed at which rain falls
+		RAIN_SPEED = 20;
 		
 		// What color is the rain?
 		COLOR = [0,0,250];
@@ -43,14 +46,16 @@
 				this.yEnd = this.yStart + (LENGTH_RAIN * Math.cos(-ANGLE / (Math.PI/180)));
 			}
 			fall() {
-				this.xStart = this.xStart + 1;
-				this.yStart = this.yStart + 1;
+				if(this.xStart > canvas.width){
+					this.xStart = 0
+				}
+				if(this.yStart > canvas.height){
+					this.yStart = 0
+				}
+				this.xStart = this.xStart + RAIN_SPEED;
+				this.yStart = this.yStart + RAIN_SPEED;
 				this.xEnd = this.xStart + (LENGTH_RAIN * Math.sin(-ANGLE / (Math.PI/180)));
 				this.yEnd = this.yStart + (LENGTH_RAIN * Math.cos(-ANGLE / (Math.PI/180)));
-				console.log('xStart' + this.xStart);
-				console.log('yStart' + this.yStart);
-				console.log('xEnd' + this.xEnd);
-				console.log('yEnd' + this.yEnd);
 			}
 			draw() {
 				this.fall();
